@@ -5,13 +5,13 @@
 
 namespace models {
 struct TimeDate {
-    TimeDate(double sec, double min, double hour, uint32_t day, uint32_t month, uint32_t year): 
-            sec(sec), min(min), hour(hour),
-            day(day), month(month), year(year) {}
+    TimeDate(double sec, double min, double hour, uint32_t day, uint32_t month, uint32_t year);
 
     //FIXME: to timestamp
     TimeDate(double seconds): sec(seconds) {}
     TimeDate(): TimeDate(0) {}
+
+    TimeDate& operator=(TimeDate& td) = default;
 
 	double sec;		
 	double min;		
@@ -21,35 +21,12 @@ struct TimeDate {
 	uint32_t month;	
 	uint32_t year;	
 
-    double to_timestamp();
+    double to_timestamp() const;
+    std::string to_string() const;
+    std::wstring to_wstring() const;
 
-    std::string to_string();
-    std::wstring to_wstring();
-
-    void add_seconds(double delta) {
-    this->sec += delta;
-    if (this->sec >= 60) {
-        this->sec -= 60;
-        this->min += 1;
-    }
-    if (this->min >= 60) {
-        this->min -= 60;
-        this->hour += 1;
-    }
-    if (this->hour >= 24) {
-        this->hour -= 24;
-        this->day += 1;
-    }
-
-    if (this->day >= 31) {
-        this->day -= 31;
-        this->month += 1;
-    }
-    if (this->month >= 12) {
-        this->month -= 12;
-        this->year += 1;
-    }
-}
+    //Не прибавляйте больше 60 секунд!!
+    void add_seconds(double delta);
 	
 };
 
@@ -66,16 +43,15 @@ struct TimeValue {
     TimeValue(TimeDate t, double v): t(t), v(v) {}
     TimeDate t;
     double v;
+    bool operator<(const TimeValue& other) const;
 };
 
 class Channel {
     using container = std::vector<TimeValue>;
-    using iterator = container::iterator;
 public:
-
+    using iterator = container::iterator;
     Channel(std::string&& name): name(std::move(name)) {}
-    Channel(std::string&& name, container&& freq, Bounds bounds) : 
-            name(std::move(name)), frequency(std::move(freq)),bounds(bounds) {}
+    Channel(std::string&& name, container&& freq, Bounds bounds);
     Channel(Channel&& other) = default;
 
     Bounds get_bounds() const {return bounds;}
@@ -84,8 +60,7 @@ public:
     container get_frequency() {return frequency;}
     void add_time_value(TimeValue tv) {frequency.push_back(tv);}
 
-    //FIXME:
-    //std::pair<iterator, iterator> get_window(TimeDate start_time, TimeDate end_time);
+    std::pair<iterator, iterator> get_window(TimeDate start_time, TimeDate end_time);
 private:
     Bounds bounds;
     container frequency; 

@@ -12,8 +12,6 @@ class ParserInterface {
         virtual models::Signal Parse(std::istream& stream) = 0;
     };
 
-
-
 class FileParser {
     public:
         FileParser();

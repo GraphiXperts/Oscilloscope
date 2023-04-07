@@ -23,7 +23,5 @@ private:
     void parse_frequency(std::istream& file, models::Signal& signal, models::TimeDate start_td);
 };
 
-
-
 }//namespace
 
