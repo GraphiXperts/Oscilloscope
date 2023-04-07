@@ -7,7 +7,7 @@ namespace models {
 struct TimeDate {
     TimeDate(double sec, double min, double hour, uint32_t day, uint32_t month, uint32_t year);
 
-    //FIXME: to timestamp
+    
     TimeDate(double seconds): sec(seconds) {}
     TimeDate(): TimeDate(0) {}
 
@@ -27,7 +27,13 @@ struct TimeDate {
 
     //Не прибавляйте больше 60 секунд!!
     void add_seconds(double delta);
-	
+
+    bool operator==(const TimeDate& other) const;
+    bool operator<(const TimeDate& other) const;
+    inline bool operator>(const TimeDate& other) const;
+    inline bool operator<=(const TimeDate& other) const;
+    inline bool operator>=(const TimeDate& other) const;
+    inline bool operator!=(const TimeDate& other) const;
 };
 
 
