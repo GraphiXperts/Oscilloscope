@@ -15,3 +15,6 @@ out/
 
 # CLion build directories
 cmake-build-*/
+
+#MacOS
+.DS_Store
