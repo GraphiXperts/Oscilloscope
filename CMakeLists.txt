@@ -19,10 +19,9 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-find_package(Qt5Widgets REQUIRED)
+find_package(Qt6 COMPONENTS Core Widgets REQUIRED)
 
 include_directories(${Qt5Widgets_INCLUDES})
 
 add_subdirectory(thirdparty)
-
 add_subdirectory(src)
