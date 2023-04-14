@@ -14,3 +14,5 @@ if(NOT ec_POPULATED)
     FetchContent_Populate(ec)
     add_subdirectory(${ec_SOURCE_DIR} ${ec_BINARY_DIR})
 endif()
+
+add_subdirectory(qcustomplot)
