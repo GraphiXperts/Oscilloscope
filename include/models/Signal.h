@@ -63,7 +63,7 @@ public:
     Bounds get_bounds() const {return bounds;}
     void set_bounds(Bounds bounds) {this->bounds = bounds;}
     const std::string& get_name() const {return name;}
-    container get_frequency() {return frequency;}
+    const container& get_frequency() const {return frequency;}
     void add_time_value(TimeValue tv) {frequency.push_back(tv);}
 
     std::pair<iterator, iterator> get_window(TimeDate start_time, TimeDate end_time);
