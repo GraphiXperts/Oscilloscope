@@ -84,21 +84,18 @@ void TxtParser::parse_frequency(std::istream& file, models::Signal& signal, mode
     models::TimeValue tv(time, number);
 
     for (uint64_t i = 0; i < signal.get_reports_count(); ++i) {
-        
-        chan_index = i % chan_count;
-        file >> number;
-        
-        if (number > max_values[chan_index])
-            max_values[chan_index] = number;
-        if (number < min_values[chan_index])
-            min_values[chan_index] = number;
-        
-        tv.t = time; tv.v = number;
+        for (uint64_t chan_index = 0; chan_index < chan_count; ++chan_index) {
+            file >> number;
+            if (number > max_values[chan_index])
+                max_values[chan_index] = number;
+            if (number < min_values[chan_index])
+                min_values[chan_index] = number;
+            
+            tv.t = time; tv.v = number;
 
-        signal.get_channels()[chan_index].add_time_value(tv);
-
-        if ((chan_index) == (chan_count - 1))
-            time.add_seconds(1.0/signal.get_sampling_frequency());
+            signal.get_channels()[chan_index].add_time_value(tv);
+        }
+        time.add_seconds(1.0/signal.get_sampling_frequency());
     }
     bounds.end_time = time;
 
