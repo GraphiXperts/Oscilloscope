@@ -2,7 +2,8 @@ set(SRCROOT ${PROJECT_SOURCE_DIR}/src/models)
 set(INCROOT ${PROJECT_SOURCE_DIR}/include/models)
 
 set(SRC
-    
+    ${INCROOT}/result.hpp
+	${SRCROOT}/result.cpp
 )
 
 
