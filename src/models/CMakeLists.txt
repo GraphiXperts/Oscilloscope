@@ -4,6 +4,8 @@ set(INCROOT ${PROJECT_SOURCE_DIR}/include/models)
 set(SRC
     ${INCROOT}/result.hpp
 	${SRCROOT}/result.cpp
+	${INCROOT}/time.hpp
+	${SRCROOT}/time.cpp
 )
 
 
