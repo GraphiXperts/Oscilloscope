@@ -5,9 +5,9 @@ set(SRC
     
 )
 
+
 if (NOT "${SRC}" STREQUAL "")
 	message(STATUS "Models building...")
-	set(MODELS_CREATED)
 
 	add_library(models ${SRC})
 

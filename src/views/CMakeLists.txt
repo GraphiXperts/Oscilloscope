@@ -7,18 +7,17 @@ set(SRC
 
 if (NOT "${SRC}" STREQUAL "")
 	message(STATUS "Views building...")
-	set(VIEWS_CREATED)
 	
 	add_library(views ${SRC})
 
 	target_include_directories(views PUBLIC ${PROJECT_SOURCE_DIR}/include/)
 
-	if (DEFINED MODELS_CREATED)
+	if (TARGET models)
 		message(STATUS "Views linked to models.")
 		target_link_libraries(views PUBLIC models)
 	endif()
 
-	if (DEFINED CONROLLERS_CREATED)
+	if (TARGET controllers)
 		message(STATUS "Views linked to controllers")
 		target_link_libraries(views PUBLIC controllers)
 	endif()

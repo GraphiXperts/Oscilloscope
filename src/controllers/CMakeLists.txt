@@ -5,15 +5,15 @@ set(SRC
 
 )
 
+
 if (NOT "${SRC}" STREQUAL "")
 	message(STATUS "Controller building...")
-	set(CONTROLLER_CREATED)
 
 	add_library(controllers ${SRC})
 
 	target_include_directories(controllers PUBLIC ${PROJECT_SOURCE_DIR}/include/)
 
-	if (DEFINED MODELS_CREATED)
+	if (TARGET models)
 		message(STATUS "Controllers linked to models")
 		target_link_libraries(controllers PUBLIC models)
 	endif()
