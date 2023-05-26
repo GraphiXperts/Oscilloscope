@@ -6,6 +6,8 @@ set(SRC
 	${SRCROOT}/result.cpp
 	${INCROOT}/time.hpp
 	${SRCROOT}/time.cpp
+	${INCROOT}/channel.hpp
+	${SRCROOT}/channel.cpp
 )
 
 
