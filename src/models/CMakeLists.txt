@@ -12,6 +12,11 @@ set(SRC
 	${SRCROOT}/signal.cpp
 	${INCROOT}/parser.hpp
 	${SRCROOT}/parser.cpp
+
+	${INCROOT}/signal_parsers/istream_wrapper.hpp
+	${SRCROOT}/signal_parsers/istream_wrapper.cpp
+	${INCROOT}/signal_parsers/txt_parser.hpp
+	${SRCROOT}/signal_parsers/txt_parser.cpp
 )
 
 

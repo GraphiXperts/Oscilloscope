@@ -1,5 +1,6 @@
 #include <fstream>
 #include <models/parser.hpp>
+#include <iostream>
 #include <sstream>
 
 namespace mdl {

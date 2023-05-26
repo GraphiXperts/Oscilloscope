@@ -17,9 +17,9 @@ tm localtime(time_t t) {
     tm result        = fromStdTm(*std::localtime(&tt));
     long double time = t - std::floor(t);
 
-    result.tm_millisec = std::floor(time *= 1000);  // milliseconds
-    result.tm_microsec = std::floor(time *= 1000);  // microseconds
-    result.tm_nanosec  = std::floor(time *= 1000);  // nanoseconds
+    result.tm_millisec = std::floor((time -= result.tm_sec) *= 1000);  // milliseconds
+    result.tm_microsec = std::floor((time -= result.tm_millisec) *= 1000);  // microseconds
+    result.tm_nanosec  = std::floor((time -= result.tm_microsec) *= 1000);  // nanoseconds
 
     return result;
 }

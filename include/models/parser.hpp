@@ -15,7 +15,7 @@ namespace mdl {
 class ParserBase {
  public:
     // Virtual destructor.
-    virtual ~ParserBase() = 0;
+    virtual ~ParserBase() = default;
 
     // Parse a signal from a stream.
     virtual VResult<Signal> parse(std::istream& in) const = 0;
