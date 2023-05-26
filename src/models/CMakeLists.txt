@@ -10,6 +10,8 @@ set(SRC
 	${SRCROOT}/channel.cpp
 	${INCROOT}/signal.hpp
 	${SRCROOT}/signal.cpp
+	${INCROOT}/parser.hpp
+	${SRCROOT}/parser.cpp
 )
 
 
