@@ -63,7 +63,7 @@ VResult<Signal> TxtParser::parse(std::istream& input) const {
         std::vector<Channel> channels(channel_count);
 
         // Reading the channels name
-        in.ignore(';');
+        in.delimiter(';');
         for (size_t i = 0; i < channel_count; ++i) {
             std::string channel_name;
             in >> channel_name;
@@ -84,7 +84,7 @@ VResult<Signal> TxtParser::parse(std::istream& input) const {
                 channels[j].add({sample_value, sample_time});
             }
         }
-        in.attract(';');
+        in.undelimiter(';');
 
         for (size_t i = 0; i < channel_count; ++i)
             result.addChannel(std::move(channels[i]));
