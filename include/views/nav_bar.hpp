@@ -16,14 +16,15 @@ namespace vw {
 ////////////////////////////////////////////////////////////////
 class NavBar : public QToolBar {
  protected:
-    using Self = NavBar;
-    using Base = QToolBar;
+	using Self = NavBar;
+	using Base = QToolBar;
 
 	std::list<QWidget*> elements_;
+	//std::list<QAction*> actions_;
 
  public:
 	// Default constructor
-	NavBar();
+	NavBar(QWidget* parent = nullptr);
 	// Destructor
     ~NavBar() override;
 
@@ -31,9 +32,10 @@ class NavBar : public QToolBar {
     void addButton(const std::wstring& label, std::function<void()>&& func = []{});
     // Removes everything in the navigation bar
 	void clear();
-	
- signals: 
- 	void signal_info();
+
+ private slots:
+    void fileClicked();
+
 };
 
 

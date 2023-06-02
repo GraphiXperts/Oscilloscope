@@ -9,10 +9,10 @@ namespace vw {
 
 MainInterface::MainInterface() {
 
-    NavBar* nav_bar = new NavBar();
+    NavBar* nav_bar = new NavBar(nullptr);
 
     this->addToolBar(nav_bar);
-
+    
 
     // this->addLayout(&nav_bar_);
     // this->addWidget(&workspace_);
