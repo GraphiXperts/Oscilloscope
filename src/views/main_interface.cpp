@@ -32,6 +32,10 @@ MainInterface::~MainInterface() = default;
 void MainInterface::PlotSignal(ctrl::SignalPointer pointer) {
     SignalPlot* plot = new SignalPlot(&workspace_); 
     plot->setPointer(pointer);
+    plot->setClickCallback([this](ChannelPlot* plot){
+        workspace_.addSubWindow(plot);
+        plot->show();
+    });
     plot->show();
 }
 

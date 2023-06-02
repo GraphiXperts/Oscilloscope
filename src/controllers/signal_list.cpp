@@ -1,4 +1,5 @@
 #include <controllers/signal_list.hpp>
+#include <iostream>
 
 namespace ctrl {
 
@@ -16,7 +17,8 @@ SignalWrapper::~SignalWrapper() {}
 void SignalWrapper::notify(SignalMessage mes) {}
 
 void SignalWrapper::send(SignalMessage mes) {
-    for (auto& el : ptrs_) el->notify(mes);
+    for (auto& el : ptrs_) 
+        el->notify(mes);
 }
 
 SignalPointer SignalWrapper::getPtr() {
@@ -90,16 +92,17 @@ SignalPointer& SignalPointer::operator=(SignalPointer&& other) {
 SignalPointer& SignalPointer::operator=(SignalWrapper* other) {
     detach();
 
-    if (other != nullptr) {
+    if (other != nullptr)
         *this = std::move(other->getPtr());
-    }
+
+    return *this;
 }
 
 //----------------------------------------------------------------
 
 void SignalPointer::notify(SignalMessage message) {}
 
-void SignalPointer::send(SignalMessage message) { signal_->send(message); }
+void SignalPointer::send(SignalMessage message) { signal_->notify(message); }
 
 mdl::Signal& SignalPointer::getSignal() { return signal_->signal_; }
 
