@@ -2,7 +2,10 @@ set(INCROOT ${PROJECT_SOURCE_DIR}/include/controllers)
 set(SRCROOT ${PROJECT_SOURCE_DIR}/src/controllers)
 
 set(SRC
-
+	${INCROOT}/signal_list.hpp
+	${SRCROOT}/signal_list.cpp
+	${INCROOT}/use_cases.hpp
+	${SRCROOT}/use_cases.cpp
 )
 
 
