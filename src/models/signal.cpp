@@ -49,7 +49,7 @@ ChannelWrapper::ChannelWrapper(const Channel& channel)
     : channel_(new Channel(channel)), info_(getInfo(channel)) {}
 
 ChannelWrapper::ChannelWrapper(Channel&& channel)
-    : channel_(new Channel(std::move(channel))), info_(getInfo(channel)) {}
+    : channel_(new Channel(std::move(channel))), info_(getInfo(*channel_)) {}
 
 ChannelWrapper::ChannelWrapper(const ChannelWrapper& other) = default;
 
@@ -116,7 +116,7 @@ void Signal::update_info() {
             info_.avg_frequency = c_info.avg_frequency;
         else
             info_.avg_frequency =
-                (info_.avg_frequency * counter + c_info.avg_frequency) /
+                (info_.avg_frequency * counter + c_info.avg_frequency * c_info.sample_count) /
                 (counter + c_info.sample_count);
 
         counter += c_info.sample_count;
