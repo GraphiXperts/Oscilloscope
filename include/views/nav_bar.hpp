@@ -1,28 +1,29 @@
 #ifndef _VIEWS_NAV_BAR_HPP_
 #define _VIEWS_NAV_BAR_HPP_
 
-#include <QHBoxLayout>
-#include <list>
-#include <string>
-#include <functional>
+#include <QApplication>
+#include <QMainWindow>
+#include <QToolBar>
+#include <QAction>
+#include <QMenu>
+#include <QMessageBox>
+
 
 namespace vw {
 
 ////////////////////////////////////////////////////////////////
 // \brief Object that manages the navigation bar.
 ////////////////////////////////////////////////////////////////
-class NavBar : public QHBoxLayout {
+class NavBar : public QToolBar {
  protected:
     using Self = NavBar;
-    using Base = QHBoxLayout;
+    using Base = QToolBar;
 
 	std::list<QWidget*> elements_;
 
  public:
 	// Default constructor
 	NavBar();
-	// Constructor with parent
-	explicit NavBar(QBoxLayout* parent);
 	// Destructor
     ~NavBar() override;
 
@@ -30,6 +31,9 @@ class NavBar : public QHBoxLayout {
     void addButton(const std::wstring& label, std::function<void()>&& func = []{});
     // Removes everything in the navigation bar
 	void clear();
+	
+ signals: 
+ 	void signal_info();
 };
 
 

@@ -14,10 +14,10 @@ namespace vw {
 ////////////////////////////////////////////////////////////////
 // \brief Object that used to draw interface.
 ////////////////////////////////////////////////////////////////
-class MainInterface : public QVBoxLayout {
+class MainInterface : public QMainWindow {
  protected:
 	using Self = MainInterface;
-	using Base = QVBoxLayout;
+	using Base = QMainWindow;
 	
 	using WidList = std::list<QWidget*>;
 
@@ -26,9 +26,9 @@ class MainInterface : public QVBoxLayout {
 
  public:
 	// Default constructor
-	MainInterface(QWidget* parent = nullptr);
+	MainInterface();
 	// Destructor
-	~MainInterface();
+	~MainInterface() override;
 
     // Plot signal
 	void PlotSignal(ctrl::SignalPointer pointer);

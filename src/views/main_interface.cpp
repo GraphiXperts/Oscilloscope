@@ -7,24 +7,15 @@ namespace vw {
 /// MainInterface implementation
 ////////////////////////////////////////////////////////////////
 
-MainInterface::MainInterface(QWidget *parent) : Base(parent) {
-    this->setContentsMargins(0, 0, 0, 0);
-    this->setSpacing(0);
-    
-    nav_bar_.addButton(L"Файл", [this](){
-        QString filter = tr("*.txt");
-        QString file_name = QFileDialog::getOpenFileName(nullptr, QString::fromStdWString(L"Открыть файл"), "", filter);
-        auto result = ctrl::addSignalFromFile(file_name.toStdString());
+MainInterface::MainInterface() {
 
-        if (result)
-            this->PlotSignal(*result);
-        else
-            QMessageBox::critical(nullptr, QString::fromStdWString(L"Ошибка"), QString::fromStdWString(L"Не удалось открыть файл"));
+    NavBar* nav_bar = new NavBar();
 
-    });
+    this->addToolBar(nav_bar);
 
-    this->addLayout(&nav_bar_);
-    this->addWidget(&workspace_);
+
+    // this->addLayout(&nav_bar_);
+    // this->addWidget(&workspace_);
 }
 
 MainInterface::~MainInterface() = default;

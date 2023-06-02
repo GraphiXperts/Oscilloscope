@@ -1,45 +1,44 @@
-#include <QPushButton>
-#include <QObject>
 #include <views/nav_bar.hpp>
+#include<iostream>
 
 namespace vw {
 
-////////////////////////////////////////////////////////////////
-/// NavBar implementation
-////////////////////////////////////////////////////////////////
+NavBar::NavBar(QWidget* parent = nullptr){
+    QAction* action_file = new QAction("Файл", this);
+    QAction* action_view = new QAction("Вид", this);
+    QAction* action_tools = new QAction("Инструрменты", this);
+    QAction* action_windows = new QAction("Окна", this);
 
-NavBar::NavBar() {
-	this->setContentsMargins(5, 5, 5, 5);
-    this->setSpacing(5);
-    this->setAlignment(Qt::AlignLeft);
+    QMenu* menu = new QMenu(this);
+    menu->addAction("Информация о канале");
+    menu->addAction("Option 2");
+    menu->addAction("Option 3");
+
+    action_tools->setMenu(menu);
+
+    addAction(action_file);
+    addAction(action_view);
+    addAction(action_tools);
+    addAction(action_windows);
+
+    QObject::connect(menu, &QMenu::triggered, [&](QAction* action) {
+        if (action == menu->actions().at(0)) { // Проверка, что выбрана Option 1
+            emit signal_info(); // Вызов сигнала о выборе Option 1
+        } else {
+            QMessageBox::information(parentWidget(), "Selected Option", action->text());
+        }
+    });
+
 }
 
-NavBar::NavBar(QBoxLayout* parent) { 
-	parent->addLayout(this); 
-	this->setContentsMargins(5, 5, 5, 5);
-    this->setSpacing(5);
-    this->setAlignment(Qt::AlignLeft);
-}
-
-NavBar::~NavBar() = default;
-
-void NavBar::addButton(const std::wstring& title,
-                       std::function<void()>&& func) {
-    QPushButton* button = new QPushButton(QString::fromStdWString(title));
-
-	button->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    button->setFixedSize(button->sizeHint());
-
-    QObject::connect(button, &QPushButton::clicked, func);
-
-    this->addWidget(button);
-    elements_.push_back(button);
-}
-
-void NavBar::clear() {
-	for(auto el : elements_)
-        delete el;
+NavBar::~NavBar() {
+    for(auto item : elements_) 
+        delete item;
     elements_.clear();
 }
 
-}  // namespace vw
+void NavBar::signal_info() {
+    return;
+}
+
+}

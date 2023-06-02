@@ -7,13 +7,10 @@ int main(int argc, char *argv[]) {
     ctrl::init();
 
 	QApplication app(argc, argv);
-	QMainWindow window;
 
-	QWidget *widget = new QWidget();
-	window.setCentralWidget(widget);
-	vw::MainInterface* main_interface = new vw::MainInterface(widget);
+	vw::MainInterface main_interface;
 
-	window.show();
+	main_interface.show();
 	app.exec();
 
 }
