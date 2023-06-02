@@ -71,6 +71,42 @@ struct Points {
 Points getPoints(mdl::Range range);
 
 ////////////////////////////////////////////////////////////////
+// \brief Channel plot.
+////////////////////////////////////////////////////////////////
+
+class ChannelPlot : public QMdiSubWindow,
+                    public QVBoxLayout,
+                    public ctrl::SignalPointer {
+ protected:
+    using Self  = ChannelPlot;
+    using WBase = QMdiSubWindow;
+    using LBase = QVBoxLayout;
+    using PBase = ctrl::SignalPointer;
+
+    using WidgetList = std::list<QWidget*>;
+    
+    const mdl::Channel* channel_;
+
+ public:
+    // Default constructor
+    ChannelPlot(QWidget* parent = nullptr);
+    // Destructor
+    ~ChannelPlot() override;
+
+    // Notify from signal
+    void notify(ctrl::SignalMessage mes) override;
+    // Set pointer to signal
+    void setPointer(ctrl::SignalPointer ptr);
+    // Set reference to channel
+    void setChannel(const mdl::Channel& channel);
+    // Update plot
+    void update();
+    // Show
+    void show();
+    
+}; 
+
+////////////////////////////////////////////////////////////////
 // \brief Object that plots signals
 ////////////////////////////////////////////////////////////////
 class SignalPlot : public QMdiSubWindow,
@@ -86,6 +122,7 @@ class SignalPlot : public QMdiSubWindow,
 
     size_t plot_count_;
     WidgetList widgets_;
+    std::function<void(ChannelPlot*)> click_;
 
     void clear_plots();
     void add_plot(const mdl::Channel& channel);
@@ -100,11 +137,15 @@ class SignalPlot : public QMdiSubWindow,
     void notify(ctrl::SignalMessage mes) override;
     // Set pointer to signal
     void setPointer(ctrl::SignalPointer ptr);
+    // Set click callback
+    void setClickCallback(std::function<void(ChannelPlot*)>&& cb);
     // Update plot
     void update();
     // Show
     void show();
 };
+
+
 
 }  // namespace vw
 

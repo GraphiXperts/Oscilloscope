@@ -74,9 +74,71 @@ Points getPoints(mdl::Range range) {
     points.clear();
 
     for (auto& el : range)
-        points.add(el.value, el.time);
+        points.add(el.time, el.value);
     
     return points;
+}
+
+////////////////////////////////////////////////////////////////
+/// ChannelPlot implementation
+////////////////////////////////////////////////////////////////
+
+ChannelPlot::ChannelPlot(QWidget* parent) : WBase(parent) {
+    QWidget* widget = new QWidget();
+    this->WBase::setWidget(widget);
+    this->WBase::setMinimumSize(300, 200);
+    widget->setLayout(static_cast<LBase*>(this));
+    this->LBase::setSpacing(0);
+    this->LBase::setContentsMargins(0, 0, 0, 0);
+}
+
+ChannelPlot::~ChannelPlot() {
+    this->PBase::send({ctrl::mes::PointerDestroyed}); 
+}
+
+void ChannelPlot::notify(ctrl::SignalMessage msg) {
+    switch (msg.type) {
+        case ctrl::mes::SignalDestroyed:
+            this->PBase::operator=(nullptr);
+            break;
+        default:
+            std::cout << "SignalPointer " << this
+                      << " got unknown message type " << msg.type << std::endl;
+    }
+}
+
+void ChannelPlot::setPointer(ctrl::SignalPointer ptr) {
+    this->PBase::operator=(ptr);
+}
+
+void ChannelPlot::setChannel(const mdl::Channel& channel) {
+    channel_ = &channel;
+}
+
+void ChannelPlot::update() {
+    QCustomPlot* plot = new QCustomPlot();
+
+    auto res = channel_->range(0, channel_->size() - 1);
+    Points points = getPoints(*res);
+
+    plot->xAxis->setRange(points.bounds.left, points.bounds.right);
+    plot->yAxis->setRange(points.bounds.bottom, points.bounds.top);
+    plot->xAxis->setLabel("t");
+    plot->yAxis->setLabel("v");
+
+    auto graph = plot->addGraph();
+    graph->setData(points.x, points.y);
+    graph->setPen(QPen(Qt::black));
+
+    plot->setMinimumSize(150, 60);
+
+    this->LBase::addWidget(plot);
+    plot->replot();
+
+}
+
+void ChannelPlot::show() {
+    this->WBase::show();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -84,6 +146,7 @@ Points getPoints(mdl::Range range) {
 ////////////////////////////////////////////////////////////////
 
 void SignalPlot::clear_plots() {
+    plot_count_ = 0;
     for (auto el : widgets_) delete el;
     widgets_.clear();
 }
@@ -98,29 +161,55 @@ void SignalPlot::add_plot(const mdl::Channel& channel) {
     plot->yAxis->setRange(points.bounds.bottom, points.bounds.top);
     plot->xAxis->setTickLabels(false);
     plot->yAxis->setTickLabels(false);
+    plot->xAxis->setVisible(false);
+
+    plot->axisRect()->setAutoMargins(QCP::msNone);
+    plot->axisRect()->setMargins(QMargins(0, 0, 0, 0));
 
     auto graph = plot->addGraph();
     graph->setData(points.x, points.y);
     graph->setPen(QPen(Qt::black));
 
-    plot->setFixedSize(300, 200);
+    QCPItemText* text = new QCPItemText(plot);
+    text->setPositionAlignment(Qt::AlignLeft | Qt::AlignBottom);
+    text->position->setType(QCPItemPosition::ptAxisRectRatio);
+    text->position->setCoords(0.03, 1);
+    text->setText(QString::fromStdWString(channel.name()));
+
+    plot->setMinimumSize(150, 60);
 
     this->LBase::addWidget(plot);
+    plot->replot();
+
+    QObject::connect(plot, &QCustomPlot::mousePress, [&channel, this]{
+        ChannelPlot* plot = new ChannelPlot();
+        plot->setPointer(*this);
+        plot->setChannel(channel);
+        plot->update();
+        click_(plot);
+    });
+
     widgets_.push_back(plot);
 
     plot_count_++;
 
-    this->WBase::setMinimumHeight(200 * plot_count_);
+    this->WBase::setMinimumHeight(60 * plot_count_);
 }
 
 //----------------------------------------------------------------
 
 SignalPlot::SignalPlot(QWidget* parent) : WBase(parent) {
-    this->WBase::setLayout(static_cast<LBase*>(this));
-    this->WBase::setMinimumSize(300, 200);
+    QWidget* widget = new QWidget();
+    this->WBase::setWidget(widget);
+    this->WBase::setMinimumWidth(150);
+    widget->setLayout(static_cast<LBase*>(this));
+    this->LBase::setSpacing(2);
+    this->LBase::setContentsMargins(1, 1, 1, 1);
 }
 
-SignalPlot::~SignalPlot() { this->PBase::send({ctrl::mes::SignalDestroyed}); }
+SignalPlot::~SignalPlot() { 
+    this->PBase::send({ctrl::mes::PointerDestroyed}); 
+}
 
 void SignalPlot::notify(ctrl::SignalMessage msg) {
     switch (msg.type) {
@@ -131,10 +220,15 @@ void SignalPlot::notify(ctrl::SignalMessage msg) {
             std::cout << "SignalPointer " << this
                       << " got unknown message type " << msg.type << std::endl;
     }
-}
+} 
 
 void SignalPlot::setPointer(ctrl::SignalPointer ptr) {
     this->PBase::operator=(ptr);
+    update();
+}
+
+void SignalPlot::setClickCallback(std::function<void(ChannelPlot*)>&& cb) {
+    click_ = std::move(cb);
 }
 
 void SignalPlot::update() { 
@@ -143,8 +237,12 @@ void SignalPlot::update() {
     const size_t signal_size = this->PBase::getSignal().size();
     for (size_t i = 0; i < signal_size; i++)
         add_plot(this->PBase::getSignal().at(i));
+
+    show();
 }
 
 void SignalPlot::show() { this->WBase::show(); }
+
+
 
 }  // namespace vw
