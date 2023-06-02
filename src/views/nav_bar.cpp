@@ -3,7 +3,7 @@
 #include <controllers/use_cases.hpp>
 #include <QMdiSubWindow>
 #include <QFileDialog>
-
+#include <views/plots.hpp>
 namespace vw {
 
 NavBar::NavBar(QMdiArea* workspace): workspace_(workspace){
@@ -40,8 +40,16 @@ void NavBar::fileClicked() {
         QString file_name = QFileDialog::getOpenFileName(nullptr, QString::fromStdWString(L"Открыть файл"), "", filter);
         auto result = ctrl::addSignalFromFile(file_name.toStdString());
         
-        if (result)
-            QMessageBox::information(nullptr, QString::fromStdWString(L"Успех"), QString::fromStdWString(L"Файл успешно открыт"));
+        if (result) {
+            SignalPlot* plot = new SignalPlot(workspace_); 
+            plot->setPointer(*result);
+            plot->setClickCallback([this](ChannelPlot* plot){
+                workspace_->addSubWindow(plot);
+                plot->show();
+            });
+            plot->show();
+        }
+            
         else
             QMessageBox::critical(nullptr, QString::fromStdWString(L"Ошибка"), QString::fromStdWString(L"Не удалось открыть файл"));
 
