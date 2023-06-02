@@ -2,7 +2,12 @@ set(INCROOT ${PROJECT_SOURCE_DIR}/include/views)
 set(SRCROOT ${PROJECT_SOURCE_DIR}/src/views)
 
 set(SRC
-    
+    ${INCROOT}/plots.hpp
+	${SRCROOT}/plots.cpp
+	${INCROOT}/nav_bar.hpp
+	${SRCROOT}/nav_bar.cpp
+	${INCROOT}/main_interface.hpp
+	${SRCROOT}/main_interface.cpp
 )
 
 if (NOT "${SRC}" STREQUAL "")

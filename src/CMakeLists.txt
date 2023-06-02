@@ -5,7 +5,7 @@ add_subdirectory(views)
 set(SRCROOT ${PROJECT_SOURCE_DIR}/src)
 
 set(SRC
-	
+	main.cpp
 )
 
 if (NOT "${SRC}" STREQUAL "")
