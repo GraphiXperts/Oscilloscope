@@ -61,20 +61,26 @@ void istream_wrapper::comment(std::initializer_list<char> chars) {
 
 void istream_wrapper::delimiter(char c) {
     delimiter_chars_[c] = true;
+    ignore_chars_[c] = true;
 }
 
 void istream_wrapper::delimiter(std::initializer_list<char> chars) {
-    for (char c : chars)
+    for (char c : chars) {
         delimiter(c);
+        ignore(c);
+    }
 }
 
 void istream_wrapper::undelimiter(char c) {
     delimiter_chars_[c] = false;
+    ignore_chars_[c] = false;
 }
 
 void istream_wrapper::undelimiter(std::initializer_list<char> chars) {
-    for (char c : chars)
+    for (char c : chars) {
         undelimiter(c);
+        attract(c);
+    }
 }
 
 }  // namespace mdl
