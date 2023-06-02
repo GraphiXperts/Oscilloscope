@@ -8,7 +8,7 @@ namespace ctrl {
 void init();
 
 mdl::VResult<SignalPointer> addSignalFromFile(const std::string &filename);
-
+mdl::VResult<SignalPointer> getSignal();
 } // namespace ctrl
 
 #endif // _CONTROLLERS_USE_CASES_HPP_

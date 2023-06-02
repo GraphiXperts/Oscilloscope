@@ -22,4 +22,11 @@ mdl::VResult<SignalPointer> addSignalFromFile(const std::string& filename) {
         return mdl::Err(result.m());
 }
 
+mdl::VResult<SignalPointer> getSignal() {
+    if (signal_list->size() == 0) {
+        return mdl::Err("No signals in list");
+    }
+    return mdl::Ok(signal_list->at(0)->getPtr());
+}
+
 } // namespace ctrl

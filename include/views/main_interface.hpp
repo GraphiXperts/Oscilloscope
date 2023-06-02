@@ -24,6 +24,7 @@ class MainInterface : public QMainWindow {
 	NavBar nav_bar_;
 	QMdiArea workspace_;
 
+
  public:
 	// Default constructor
 	MainInterface();

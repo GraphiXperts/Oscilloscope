@@ -7,7 +7,9 @@
 #include <QAction>
 #include <QMenu>
 #include <QMessageBox>
-
+#include <QToolButton>
+#include <QMdiArea>
+#include <QLabel>
 
 namespace vw {
 
@@ -18,13 +20,14 @@ class NavBar : public QToolBar {
  protected:
 	using Self = NavBar;
 	using Base = QToolBar;
-
+	QMdiArea* workspace_;
 	std::list<QWidget*> elements_;
 	//std::list<QAction*> actions_;
 
  public:
+	NavBar();
 	// Default constructor
-	NavBar(QWidget* parent = nullptr);
+	NavBar(QMdiArea* workspace);
 	// Destructor
     ~NavBar() override;
 
@@ -35,7 +38,7 @@ class NavBar : public QToolBar {
 
  private slots:
     void fileClicked();
-
+	void signalInfoClicked();
 };
 
 
