@@ -38,7 +38,7 @@ class istream_wrapper {
             if (!is.delimiter_chars_[c]) {
                 value.push_back(is.input_.get());
             } else {
-                break;
+                return is;
             }
         }
     }
