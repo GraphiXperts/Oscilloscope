@@ -4,10 +4,10 @@
 #include <QMdiSubWindow>
 #include <QFileDialog>
 #include <views/plots.hpp>
-#include <views/modeling.hpp>
+#include <views/modeling_choose.hpp>
 namespace vw {
 
-NavBar::NavBar(QMdiArea* workspace): workspace_(workspace){
+NavBar::NavBar(QMdiArea* workspace): workspace_(workspace){ 
     QAction* action_file = new QAction("Файл", this);
     
     addAction(action_file);
@@ -116,7 +116,7 @@ void NavBar::signalInfoClicked() {
 }
 
 void NavBar::modelingClicked() {
-    ModelingWindow secondaryWindow;
+    ChooseModelWindow secondaryWindow;
     secondaryWindow.exec();
 }
 
