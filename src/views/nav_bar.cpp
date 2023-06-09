@@ -4,6 +4,7 @@
 #include <QMdiSubWindow>
 #include <QFileDialog>
 #include <views/plots.hpp>
+#include <views/modeling.hpp>
 namespace vw {
 
 NavBar::NavBar(QMdiArea* workspace): workspace_(workspace){
@@ -19,10 +20,14 @@ NavBar::NavBar(QMdiArea* workspace): workspace_(workspace){
     toolButton->setMenu(menu_tools);
 
     QAction *signal_info = new QAction("Информация о сигнале", this);
+    QAction *modeling = new QAction("Моделирование", this);
     menu_tools->addAction(signal_info);
+    menu_tools->addAction(modeling);
 
+    // привязка элементов навбара к ебучим функциям обработки событий
     connect(action_file, &QAction::triggered, this, &NavBar::fileClicked);
     connect(signal_info, &QAction::triggered, this, &NavBar::signalInfoClicked);
+    connect(modeling, &QAction::triggered, this, &NavBar::modelingClicked);
 }
 
 NavBar::~NavBar() {
@@ -110,7 +115,10 @@ void NavBar::signalInfoClicked() {
 
 }
 
-
+void NavBar::modelingClicked() {
+    ModelingWindow secondaryWindow;
+    secondaryWindow.exec();
+}
 
 NavBar::NavBar() = default; //xdd
 }// namespace vw
