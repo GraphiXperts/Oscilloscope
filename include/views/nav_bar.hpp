@@ -39,9 +39,8 @@ class NavBar : public QToolBar {
  private slots:
     void fileClicked();
 	void signalInfoClicked();
+	void modelingClicked();
 };
-
-
 } // namespace vw 
 
 #endif // _VIEWS_NAV_BAR_HPP_
