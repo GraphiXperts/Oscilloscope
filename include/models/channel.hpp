@@ -67,6 +67,7 @@ class Channel {
     using Container = std::vector<Sample>;
 
     std::wstring name_;   // The name of the channel
+    std::wstring source_;   // The name of the channel
     Container samples_;  // Contain samples of the channel
 
  public:
@@ -112,6 +113,11 @@ class Channel {
     const std::wstring& name() const;
     // Set name of the channel
     void setName(const std::wstring& name);
+
+    // Get source of the channel
+    const std::wstring& source() const;
+    // Set source of the channel
+    void setSource(const std::wstring& source);
 
 };
 

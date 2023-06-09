@@ -86,4 +86,9 @@ const std::wstring &Channel::name() const { return name_; }
 
 void Channel::setName(const std::wstring &name) { name_ = name; }
 
+
+
+const std::wstring &Channel::source() const { return source_; }
+    
+void Channel::setSource(const std::wstring& source) { source_ = source;}
 }  // namespace mdl
