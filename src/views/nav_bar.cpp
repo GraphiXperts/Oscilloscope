@@ -41,7 +41,10 @@ void NavBar::fileClicked() {
         auto result = ctrl::addSignalFromFile(file_name.toStdString());
         
         if (result) {
-            SignalPlot* plot = new SignalPlot(workspace_); 
+            SignalPlot* plot = new SignalPlot();
+
+            auto window = workspace_->addSubWindow(plot);
+            window->move(workspace_->size().width() - 200, 0);
             plot->setPointer(*result);
             plot->setClickCallback([this](ChannelPlot* plot){
                 workspace_->addSubWindow(plot);

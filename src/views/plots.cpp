@@ -130,7 +130,7 @@ void ChannelPlot::update() {
     graph->setData(points.x, points.y);
     graph->setPen(QPen(Qt::black));
 
-    plot->setMinimumSize(150, 60);
+    plot->setMinimumSize(200, 80);
 
     this->LBase::addWidget(plot);
     plot->replot();
@@ -176,12 +176,24 @@ void SignalPlot::add_plot(const mdl::Channel& channel) {
     text->position->setCoords(0.03, 1);
     text->setText(QString::fromStdWString(channel.name()));
 
-    plot->setMinimumSize(150, 60);
+    plot->setMinimumSize(200, 80);
 
     this->LBase::addWidget(plot);
     plot->replot();
 
-    QObject::connect(plot, &QCustomPlot::mousePress, [&channel, this]{
+    QMenu* menu = new QMenu(plot);
+    
+    QAction* oscillogram = new QAction("Осциллограмма", plot);
+
+    menu->addAction(oscillogram);
+
+    plot->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    QObject::connect(plot, &QWidget::customContextMenuRequested, [this, plot, menu](const QPoint& pos){
+        menu->popup(plot->mapToGlobal(pos));
+    });
+
+    QObject::connect(oscillogram, &QAction::triggered, [&channel, this]{
         ChannelPlot* plot = new ChannelPlot();
         plot->setPointer(*this);
         plot->setChannel(channel);
@@ -193,7 +205,7 @@ void SignalPlot::add_plot(const mdl::Channel& channel) {
 
     plot_count_++;
 
-    this->WBase::setMinimumHeight(60 * plot_count_);
+    this->WBase::setMinimumHeight(90 * plot_count_);
 }
 
 //----------------------------------------------------------------
@@ -201,7 +213,7 @@ void SignalPlot::add_plot(const mdl::Channel& channel) {
 SignalPlot::SignalPlot(QWidget* parent) : WBase(parent) {
     QWidget* widget = new QWidget();
     this->WBase::setWidget(widget);
-    this->WBase::setMinimumWidth(150);
+    this->WBase::setMinimumWidth(200);
     widget->setLayout(static_cast<LBase*>(this));
     this->LBase::setSpacing(2);
     this->LBase::setContentsMargins(1, 1, 1, 1);

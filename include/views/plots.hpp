@@ -79,8 +79,8 @@ class ChannelPlot : public QMdiSubWindow,
                     public ctrl::SignalPointer {
  protected:
     using Self  = ChannelPlot;
-    using WBase = QMdiSubWindow;
     using LBase = QVBoxLayout;
+    using WBase = QMdiSubWindow;
     using PBase = ctrl::SignalPointer;
 
     using WidgetList = std::list<QWidget*>;
