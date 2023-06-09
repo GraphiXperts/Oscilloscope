@@ -17,6 +17,9 @@ class ChooseModelWindow : public QDialog
 public:
     ChooseModelWindow(QWidget *parent = nullptr) : QDialog(parent)
     {
+    
+    this->setWindowTitle("Выбор модели");
+
     QVBoxLayout *layout = new QVBoxLayout(this);
 
     QLabel *titleLabel = new QLabel("Выберите тип модели:");

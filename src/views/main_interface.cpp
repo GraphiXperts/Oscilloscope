@@ -13,6 +13,7 @@ MainInterface::MainInterface() {
 
     this->addToolBar(nav_bar);
     this->setCentralWidget(&workspace_);
+    this->setWindowTitle("BeerBoyz inc.");
 }
 
 MainInterface::~MainInterface() = default;
