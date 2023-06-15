@@ -2,6 +2,8 @@
 #include <models/parser.hpp>
 #include <iostream>
 #include <sstream>
+#include <codecvt>
+#include <locale>
 
 namespace mdl {
 
@@ -38,7 +40,15 @@ VResult<Signal> FileParser::parse(const std::string &file_path) const {
     std::fstream input_file(file_path, std::ios::in);
     if (!input_file.is_open()) return Err("Could not open file");
 
-    return parsers_.at(extension)->parse(input_file);
+    VResult<Signal> result = parsers_.at(extension)->parse(input_file);
+
+    if (result) {
+        std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+        for(int i = 0; i < result->size(); i++)
+            result->getChannelWrapperPtr(i)->setSource(converter.from_bytes(std::string("Получен из " + file_path)));
+    }
+
+    return result;
 }
 
 Result FileParser::addParser(const std::string &extension,

@@ -5,6 +5,7 @@
 #include <models/time.hpp>
 #include <string>
 #include <vector>
+#include <memory>
 
 namespace mdl {
 
@@ -66,7 +67,6 @@ class Channel {
  protected:
     using Container = std::vector<Sample>;
 
-    std::wstring name_;   // The name of the channel
     Container samples_;  // Contain samples of the channel
 
  public:
@@ -108,11 +108,76 @@ class Channel {
     // Get range of the channel
     VResult<Range> range(size_t begin, size_t end) const;
 
-    // Get name of the channel
-    const std::wstring& name() const;
-    // Set name of the channel
-    void setName(const std::wstring& name);
+};
 
+////////////////////////////////////////////////////////////////
+// \brief Object that contains information about a channel.
+////////////////////////////////////////////////////////////////
+struct ChannelInfo {
+    std::wstring name;    // name of the channel
+    std::wstring source;  // source of the channel
+
+    size_t sample_count;  // number of samples in the channel
+
+    etime_t start_time;     // start time of the channel
+    etime_t finish_time;    // finish time of the channel
+    etime_t duration_time;  // duration of the channel
+
+    etime_t max_frequency;  // maximum frequency
+    etime_t min_frequency;  // minimum frequency
+    etime_t avg_frequency;  // average frequency
+};
+
+// Creates informations about a channel.
+ChannelInfo getInfo(const Channel& channel);
+
+////////////////////////////////////////////////////////////////
+// \brief Object that used to wrap a channel.
+////////////////////////////////////////////////////////////////
+class ChannelWrapper {
+ protected:
+    std::shared_ptr<const Channel> channel_;  // The channel
+    ChannelInfo info_;                        // The channel info
+
+ public:
+    // Default constructor.
+    ChannelWrapper();
+    // Constructor that copy channel.
+    ChannelWrapper(const Channel& channel);
+    // Constructor that move channel.
+    ChannelWrapper(Channel&& channel);
+    // Copy constructor.
+    ChannelWrapper(const ChannelWrapper& other);
+    // Move constructor.
+    ChannelWrapper(ChannelWrapper&& other);
+    // Destructor.
+    ~ChannelWrapper();
+
+    // Assignment operator.
+
+    // Copy assignment operator.
+    ChannelWrapper& operator=(const ChannelWrapper& other);
+    // Move assignment operator.
+    ChannelWrapper& operator=(ChannelWrapper&& other);
+
+    // Accessors.
+
+    // Returns const reference to the channel.
+    const Channel& channel() const;
+    // Sets the channel.
+    void setChannel(const Channel& channel);
+    // Moves the channel
+    void setChannel(Channel&& channel);
+    // Returns channel info.
+    const ChannelInfo& info() const;
+
+    // Sets the channel name.
+    void setName(const std::wstring& name);
+    // Sets the channel source.
+    void setSource(const std::wstring& source);
+
+    // Returns true if the channel is valid.
+    bool valid() const;
 };
 
 ////////////////////////////////////////////////////////////////

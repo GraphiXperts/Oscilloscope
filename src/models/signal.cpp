@@ -2,86 +2,6 @@
 
 namespace mdl {
 
-ChannelInfo getInfo(const Channel& channel) {
-    ChannelInfo info;
-    info.name         = channel.name();
-    info.sample_count = channel.size();
-
-    info.start_time    = INFINITY;
-    info.finish_time   = -INFINITY;
-    info.duration_time = 0;
-
-    info.max_frequency = -INFINITY;
-    info.min_frequency = INFINITY;
-    info.avg_frequency = 0;
-
-    Range range    = *channel.range(0, channel.size());
-    size_t counter = 0;
-
-    for (auto i = range.begin(); i != range.end(); i++) {
-		info.start_time = std::min(info.start_time, i->time);
-		info.finish_time = std::max(info.finish_time, i->time);
-		info.duration_time = info.finish_time - info.start_time;
-
-        if (i != range.begin()) {
-            auto p       = i - 1;
-            etime_t dist = 1.0 / (i->time - p->time);
-
-            info.max_frequency = std::max(info.max_frequency, dist);
-            info.min_frequency = std::min(info.min_frequency, dist);
-            info.avg_frequency =
-                    (info.avg_frequency * counter + dist) / (counter + 1);
-			
-        	counter++;
-        }
-    }
-
-    return info;
-}
-
-////////////////////////////////////////////////////////////////
-/// ChannelWrapper implementation
-////////////////////////////////////////////////////////////////
-
-ChannelWrapper::ChannelWrapper() = default;
-
-ChannelWrapper::ChannelWrapper(const Channel& channel)
-    : channel_(new Channel(channel)), info_(getInfo(channel)) {}
-
-ChannelWrapper::ChannelWrapper(Channel&& channel)
-    : channel_(new Channel(std::move(channel))), info_(getInfo(*channel_)) {}
-
-ChannelWrapper::ChannelWrapper(const ChannelWrapper& other) = default;
-
-ChannelWrapper::ChannelWrapper(ChannelWrapper&& other) = default;
-
-ChannelWrapper::~ChannelWrapper() = default;
-
-//----------------------------------------------------------------
-
-ChannelWrapper& ChannelWrapper::operator=(const ChannelWrapper& other) =
-    default;
-
-ChannelWrapper& ChannelWrapper::operator=(ChannelWrapper&& other) = default;
-
-//----------------------------------------------------------------
-
-const Channel& ChannelWrapper::channel() const { return *channel_; }
-
-void ChannelWrapper::setChannel(const Channel& channel) {
-    channel_.reset(new Channel(channel));
-    info_ = getInfo(channel);
-}
-
-void ChannelWrapper::setChannel(Channel&& channel) {
-    channel_.reset(new Channel(std::move(channel)));
-    info_ = getInfo(channel);
-}
-
-const ChannelInfo& ChannelWrapper::info() const { return info_; }
-
-bool ChannelWrapper::valid() const { return channel_ != nullptr; }
-
 ////////////////////////////////////////////////////////////////
 /// Signal implementation
 ////////////////////////////////////////////////////////////////
@@ -149,6 +69,10 @@ const ChannelInfo& Signal::getChannelInfo(size_t index) const {
 
 const ChannelWrapper& Signal::getChannelWrapper(size_t index) const {
     return channels_.at(index);
+}
+
+ChannelWrapper* Signal::getChannelWrapperPtr(size_t index) {
+    return &channels_.at(index);
 }
 
 void Signal::setChannel(size_t index, const Channel& channel) {

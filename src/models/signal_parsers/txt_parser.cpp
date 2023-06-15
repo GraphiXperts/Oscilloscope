@@ -62,15 +62,12 @@ VResult<Signal> TxtParser::parse(std::istream& input) const {
 
         std::vector<Channel> channels(channel_count);
 
+        std::vector<std::string> channel_names(channel_count);
+
         // Reading the channels name
         in.delimiter(';');
-        for (size_t i = 0; i < channel_count; ++i) {
-            std::string channel_name;
-            in >> channel_name;
-            channels[i].setName(
-                std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(
-                    channel_name));
-        }
+        for (size_t i = 0; i < channel_count; ++i)
+            in >> channel_names[i];
 
         size_t avg_sample_count = sample_count / channel_count;
 
@@ -86,8 +83,11 @@ VResult<Signal> TxtParser::parse(std::istream& input) const {
         }
         in.undelimiter(';');
 
-        for (size_t i = 0; i < channel_count; ++i)
+        std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+        for (size_t i = 0; i < channel_count; ++i) {
             result.addChannel(std::move(channels[i]));
+            result.getChannelWrapperPtr(i)->setName(converter.from_bytes(channel_names[i]));
+        }
 
     } catch (...) {
         return Err("Something went wrong...");
