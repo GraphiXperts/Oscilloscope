@@ -29,7 +29,7 @@ mdl::VResult<SignalPointer> getSignal() {
     return mdl::Ok(signal_list->at(0)->getPtr());
 }
 
-mdl::Result addChannel(mdl::Channel channel) {
+mdl::Result addChannel(mdl::ChannelWrapper channel) {
     return mdl::Err("Not implemented");
 }
 

@@ -90,7 +90,7 @@ QString formatInfoString(mdl::Signal& signal) {
     info += std::to_string(end_time.tm_hour) + ":" + std::to_string(end_time.tm_min) + ":" + std::to_string(end_time.tm_sec) + "\n";
 
     
-    info += "Длительность: " + std::to_string( seconds ) + " - суток " + std::to_string(hours) + " - часов " + std::to_string(minutes) + " - минут " + std::to_string(seconds) + " - секунд\n";
+    info += "Длительность: " + std::to_string( days ) + " - суток " + std::to_string(hours) + " - часов " + std::to_string(minutes) + " - минут " + std::to_string(seconds) + " - секунд\n";
 
     return QString::fromStdString(info);
 }

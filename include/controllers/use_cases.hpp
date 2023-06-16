@@ -8,9 +8,10 @@ namespace ctrl {
 void init();
 
 mdl::VResult<SignalPointer> addSignalFromFile(const std::string &filename);
+
 mdl::VResult<SignalPointer> getSignal();
 
-mdl::Result addChannel(mdl::Channel channel);
+mdl::Result addChannel(mdl::ChannelWrapper channel);
 
 mdl::Result clearChannels();
 

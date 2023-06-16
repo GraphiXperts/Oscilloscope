@@ -3,9 +3,10 @@
 #include <QApplication>
 #include <QMainWindow>
 
+#include <controllers/modeling.hpp>
 int main(int argc, char *argv[]) {
     ctrl::init();
-
+	ctrl::Modeling::delayedSingleImpulse(0, 10,  1, 2, 1);
 	QApplication app(argc, argv);
 
 	vw::MainInterface main_interface;

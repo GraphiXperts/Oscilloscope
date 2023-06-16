@@ -6,6 +6,8 @@ set(SRC
 	${SRCROOT}/signal_list.cpp
 	${INCROOT}/use_cases.hpp
 	${SRCROOT}/use_cases.cpp
+	${INCROOT}/modeling.hpp
+	${SRCROOT}/modeling.cpp
 )
 
 
