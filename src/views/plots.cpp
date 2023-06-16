@@ -174,7 +174,7 @@ void SignalPlot::add_plot(const mdl::Channel& channel) {
     text->setPositionAlignment(Qt::AlignLeft | Qt::AlignBottom);
     text->position->setType(QCPItemPosition::ptAxisRectRatio);
     text->position->setCoords(0.03, 1);
-    text->setText(QString::fromStdWString(channel.name()));
+//    text->setText(QString::fromStdWString(channel.name()));
 
     plot->setMinimumSize(200, 80);
 
