@@ -29,4 +29,12 @@ mdl::VResult<SignalPointer> getSignal() {
     return mdl::Ok(signal_list->at(0)->getPtr());
 }
 
+mdl::Result addChannel(mdl::Channel channel) {
+    return mdl::Err("Not implemented");
+}
+
+mdl::Result clearChannels() {
+    return mdl::Err("Not implemented");
+}
+
 } // namespace ctrl
