@@ -25,8 +25,8 @@ public:
     QLabel *titleLabel = new QLabel("Выберите тип модели:");
     layout->addWidget(titleLabel);
 
-    QPushButton *single_impuls = new QPushButton("Задержанный единочный импульс");
-    layout->addWidget(single_impuls);
+    QPushButton *single_impulse = new QPushButton("Задержанный единочный импульс");
+    layout->addWidget(single_impulse);
 
     QPushButton *single_hop = new QPushButton("Задержанный единичный скачок");
     layout->addWidget(single_hop);
@@ -61,7 +61,7 @@ public:
     layout->addWidget(submitButton);
 
     connect(submitButton, &QPushButton::clicked, this, &ChooseModelWindow::submitOptions);
-    connect(single_impuls, &QPushButton::clicked, this, &ChooseModelWindow::handleSingleImpulsClicked);
+    connect(single_impulse, &QPushButton::clicked, this, &ChooseModelWindow::handleSingleImpulsClicked);
     connect(single_hop, &QPushButton::clicked, this, &ChooseModelWindow::handleSingleHopClicked);
     connect(decreasing_exponent, &QPushButton::clicked, this, &ChooseModelWindow::handleDecreasingExponentClicked);
     connect(sampled_sine_wave, &QPushButton::clicked, this, &ChooseModelWindow::handleSampledSineWaveClicked);
@@ -80,36 +80,54 @@ public:
     }
 
     void handleSingleImpulsClicked() {
-        std::cout<<"Imhere1";
+        accept();
+        SingleImpulse single_impulse;
+        single_impulse.exec();
     }
     void handleSingleHopClicked() {
-        std::cout<<"Imhere2";
+        accept();
+        SingleHop single_hop;
+        single_hop.exec();
     }
     void handleDecreasingExponentClicked() {
-        std::cout<<"Imhere3";
+        accept();
+        DecreasingExponent decreasing_exponent;
+        decreasing_exponent.exec();
     }
     void handleSampledSineWaveClicked() {
-        std::cout<<"Imhere4";
+        accept();
+        SampledSineWave sampled_sine_wave;
+        sampled_sine_wave.exec();
     }
     void handleMeanderClicked() {
-        std::cout<<"Imhere5";
+        accept();
+        Meander meander;
+        meander.exec();
     }
     void handleSawClicked() {
-        std::cout<<"Imhere6";
+        accept();
+        Saw saw;
+        saw.exec();
     }
     void handleExponentialEnvelopeClicked() {
+        accept();
         ExponentialEnvelope exponential_envelope_window;
         exponential_envelope_window.exec();
-        accept();
     }
     void handleBalanceEnvelopeClicked() {
-        std::cout<<"Imhere8";
+        accept();
+        BalanceEnvelope balance_envelope;
+        balance_envelope.exec();
     }
     void handleTonalEnvelopeClicked() {
-        std::cout<<"Imhere9";
+        accept();
+        TonalEnvelope tonal_envelope;
+        tonal_envelope.exec();
     }
     void handleLFMClicked() {
-        std::cout<<"Imhere10";
+        accept();
+        LFM lfm;
+        lfm.exec();
     }
 
 };
