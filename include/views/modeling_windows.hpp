@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <QDebug>
 #include <QDialog>
 #include <QFormLayout>
@@ -8,8 +9,22 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QCheckBox>
+#include <controllers/modeling.hpp>
 
 namespace vw {
+
+std::string FromQStringToString(QString qstring) {
+    std::string std_string = qstring.toUtf8().constData();
+    return std_string;
+}
+
+uint64_t FromQStringToULL(QString qstring) {
+    return std::stoull(FromQStringToString(qstring));
+}
+
+double FromQStringToDouble(QString qstring) {
+    return std::stod(FromQStringToString(qstring));
+}
 
 class SingleImpulse: public QDialog
 {
@@ -23,11 +38,11 @@ public:
         // Создание формы для ввода данных
         QFormLayout *formLayout = new QFormLayout(this);
 
-        QLabel *num_samples = new QLabel("Колличество отсчётов");
+        QLabel *num_samples = new QLabel("Количество отсчётов");
         num_sample_edit = new QLineEdit;
         formLayout->addRow(num_samples, num_sample_edit);
 
-        QLabel *time_step = new QLabel("Временной шаг");
+        QLabel *time_step = new QLabel("Частота");
         time_step_edit = new QLineEdit;
         formLayout->addRow(time_step, time_step_edit);
 
@@ -46,6 +61,9 @@ public:
             QString num_sample = num_sample_edit->text();
             QString delay_impulse = delay_impulse_edit->text();
             QString time_step = time_step_edit->text();
+            ctrl::clearChannels();
+            
+            ctrl::Modeling::delayedSingleImpulse(0, FromQStringToULL(num_sample), FromQStringToDouble(time_step), FromQStringToULL(delay_impulse), 1);
 
             num_sample_edit->clear();
             delay_impulse_edit->clear();
@@ -70,11 +88,11 @@ public:
         // Создание формы для ввода данных
         QFormLayout *formLayout = new QFormLayout(this);
 
-        QLabel *num_samples = new QLabel("Колличество отсчётов");
+        QLabel *num_samples = new QLabel("Количество отсчётов");
         num_sample_edit = new QLineEdit;
         formLayout->addRow(num_samples, num_sample_edit);
 
-        QLabel *time_step = new QLabel("Временной шаг");
+        QLabel *time_step = new QLabel("Частота");
         time_step_edit = new QLineEdit;
         formLayout->addRow(time_step, time_step_edit);
 
@@ -93,6 +111,8 @@ public:
             QString num_sample = num_sample_edit->text();
             QString delay_impulse = delay_impulse_edit->text();
             QString time_step = time_step_edit->text();
+            ctrl::clearChannels();
+            ctrl::Modeling::delayedSingleHop(0, FromQStringToULL(num_sample), FromQStringToDouble(time_step), FromQStringToULL(delay_impulse), 1);
 
             num_sample_edit->clear();
             time_step_edit->clear();
@@ -117,11 +137,11 @@ public:
         // Создание формы для ввода данных
         QFormLayout *formLayout = new QFormLayout(this);
 
-        QLabel *num_samples = new QLabel("Колличество отсчётов");
+        QLabel *num_samples = new QLabel("Количество отсчётов");
         num_sample_edit = new QLineEdit;
         formLayout->addRow(num_samples, num_sample_edit);
 
-        QLabel *time_step = new QLabel("Временной шаг");
+        QLabel *time_step = new QLabel("Частота");
         time_step_edit = new QLineEdit;
         formLayout->addRow(time_step, time_step_edit);
 
@@ -140,6 +160,8 @@ public:
             QString num_sample = num_sample_edit->text();
             QString amplitude = amplitude_edit->text();
             QString time_step = time_step_edit->text();
+            ctrl::clearChannels();
+            ctrl::Modeling::sampledDecreasingExponent(1, FromQStringToULL(num_sample), FromQStringToDouble(time_step), FromQStringToDouble(amplitude), 1);
 
             num_sample_edit->clear();
             time_step_edit->clear();
@@ -165,11 +187,11 @@ public:
         // Создание формы для ввода данных
         QFormLayout *formLayout = new QFormLayout(this);
 
-        QLabel *num_samples = new QLabel("Колличество отсчётов");
+        QLabel *num_samples = new QLabel("Количество отсчётов");
         num_sample_edit = new QLineEdit;
         formLayout->addRow(num_samples, num_sample_edit);
 
-        QLabel *time_step = new QLabel("Временной шаг");
+        QLabel *time_step = new QLabel("Частота");
         time_step_edit = new QLineEdit;
         formLayout->addRow(time_step, time_step_edit);
 
@@ -177,9 +199,13 @@ public:
         amplitude_edit = new QLineEdit;
         formLayout->addRow(amplitude, amplitude_edit);
 
-        QLabel *circle_freq = new QLabel("Круговая частота");
+        QLabel *circle_freq = new QLabel("Круговая частота(от 0 до Pi)");
         circle_freq_edit = new QLineEdit;
         formLayout->addRow(circle_freq, circle_freq_edit);
+
+        QLabel *init_phase = new QLabel("Начальная фаза(от 0 до 2Pi)");
+        init_phase_edit = new QLineEdit;
+        formLayout->addRow(init_phase, init_phase_edit);
 
         QPushButton *submitButton = new QPushButton("Отправить");
         formLayout->addWidget(submitButton);
@@ -193,19 +219,25 @@ public:
             QString time_step = time_step_edit->text();
             QString amplitude = amplitude_edit->text();
             QString circle_freq = circle_freq_edit->text();
+            QString init_phase = init_phase_edit->text();
+
+            ctrl::clearChannels();
+            ctrl::Modeling::sampledSineWave(1, FromQStringToULL(num_sample), FromQStringToDouble(time_step), FromQStringToDouble(amplitude), 
+                                                FromQStringToDouble(circle_freq), FromQStringToDouble(init_phase), 1);
 
             num_sample_edit->clear();
             time_step_edit->clear();
             amplitude_edit->clear();
             circle_freq_edit->clear();
+            init_phase_edit->clear();
     }
 
 private:
     QLineEdit *num_sample_edit;
     QLineEdit *time_step_edit;
     QLineEdit *amplitude_edit;
-    QLineEdit *numtime_freq_end_editlitude_edit;
     QLineEdit *circle_freq_edit;
+    QLineEdit *init_phase_edit;
 };
 
 class Meander: public QDialog
@@ -220,11 +252,11 @@ public:
         // Создание формы для ввода данных
         QFormLayout *formLayout = new QFormLayout(this);
 
-        QLabel *num_samples = new QLabel("Колличество отсчётов");
+        QLabel *num_samples = new QLabel("Количество отсчётов");
         num_sample_edit = new QLineEdit;
         formLayout->addRow(num_samples, num_sample_edit);
 
-        QLabel *time_step = new QLabel("Временной шаг");
+        QLabel *time_step = new QLabel("Частота");
         time_step_edit = new QLineEdit;
         formLayout->addRow(time_step, time_step_edit);
 
@@ -243,6 +275,9 @@ public:
             QString num_sample = num_sample_edit->text();
             QString time_step = time_step_edit->text();
             QString period = period_edit->text();
+
+            ctrl::clearChannels();
+            ctrl::Modeling::meander(1, FromQStringToULL(num_sample), FromQStringToDouble(time_step), FromQStringToDouble(period), 1);
 
             num_sample_edit->clear();
             time_step_edit->clear();
@@ -267,9 +302,13 @@ public:
         // Создание формы для ввода данных
         QFormLayout *formLayout = new QFormLayout(this);
 
-        QLabel *num_samples = new QLabel("Колличество отсчётов");
+        QLabel *num_samples = new QLabel("Количество отсчётов");
         num_sample_edit = new QLineEdit;
         formLayout->addRow(num_samples, num_sample_edit);
+
+        QLabel *time_step = new QLabel("Частота");
+        time_step_edit = new QLineEdit;
+        formLayout->addRow(time_step, time_step_edit);
 
         QLabel *period = new QLabel("Период");
         period_edit = new QLineEdit;
@@ -284,14 +323,20 @@ public:
     private slots:
         void handleButtonClick() {
             QString num_sample = num_sample_edit->text();
+            QString time_step = time_step_edit->text();
             QString period = period_edit->text();
 
+            ctrl::clearChannels();
+            ctrl::Modeling::saw(1, FromQStringToULL(num_sample), FromQStringToDouble(time_step), FromQStringToDouble(period), 1);
+
             num_sample_edit->clear();
+            time_step_edit->clear();
             period_edit->clear();
     }
 
 private:
     QLineEdit *num_sample_edit;
+    QLineEdit *time_step_edit;
     QLineEdit *period_edit;
 };
 
@@ -308,7 +353,7 @@ public:
         // Создание формы для ввода данных
         QFormLayout *formLayout = new QFormLayout(this);
 
-        QLabel *num_samples = new QLabel("Колличество отсчётов");
+        QLabel *num_samples = new QLabel("Количество отсчётов");
         num_sample_edit = new QLineEdit;
         formLayout->addRow(num_samples, num_sample_edit);
 
@@ -352,9 +397,10 @@ private slots:
         QString env_width = env_width_edit->text();
         QString freq = freq_edit->text();
         QString phase = phase_edit->text();
-        // Обработка введенных данных
+        ctrl::clearChannels();
+        ctrl::Modeling::exponentialEnvelope(1, FromQStringToULL(num_sample), FromQStringToDouble(time_step), FromQStringToDouble(amplitude), 
+                                                FromQStringToDouble(env_width), FromQStringToDouble(freq), FromQStringToDouble(phase), 1);
 
-        // Очистка полей ввода
         num_sample_edit->clear();
         time_step_edit->clear();
         time_freq_edit->clear();
@@ -431,9 +477,12 @@ private slots:
         QString env_freq = env_freq_edit->text();
         QString freq = freq_edit->text();
         QString phase = phase_edit->text();
-        // Обработка введенных данных
 
-        // Очистка полей ввода
+        ctrl::clearChannels();
+        ctrl::Modeling::balanceEnvelope(1, FromQStringToULL(num_sample), FromQStringToDouble(time_step), FromQStringToDouble(amplitude), 
+                                                FromQStringToDouble(env_freq), FromQStringToDouble(freq), FromQStringToDouble(phase), 1);
+
+
         num_sample_edit->clear();
         time_step_edit->clear();
         time_freq_edit->clear();
@@ -481,6 +530,18 @@ public:
         QLabel *amplitude = new QLabel("Амплитуда");
         amplitude_edit = new QLineEdit;
         formLayout->addRow(amplitude, amplitude_edit);
+        
+        QLabel *env_freq = new QLabel("Частота огибающей,");
+        env_freq_edit = new QLineEdit;
+        formLayout->addRow(env_freq, env_freq_edit);
+
+        QLabel *freq = new QLabel("Частота несущей");
+        freq_edit = new QLineEdit;
+        formLayout->addRow(freq, freq_edit);
+
+        QLabel *phase = new QLabel("Начальная фаза несущей");
+        phase_edit = new QLineEdit;
+        formLayout->addRow(phase, phase_edit);
 
         QLabel *mod_depth = new QLabel("Индекс глубины модуляции ");
         mod_depth_edit = new QLineEdit;
@@ -498,12 +559,23 @@ public:
             QString time_step = time_step_edit->text();
             QString time_freq = time_freq_edit->text();
             QString amplitude = amplitude_edit->text();
+            QString env_freq = env_freq_edit->text();
+            QString freq = freq_edit->text();
+            QString phase = phase_edit->text();
             QString mod_depth = mod_depth_edit->text();
+
+            ctrl::clearChannels();
+            ctrl::Modeling::tonalEnvelope(1, FromQStringToULL(num_sample), FromQStringToDouble(time_step), FromQStringToDouble(amplitude), 
+                                                FromQStringToDouble(env_freq), FromQStringToDouble(freq), FromQStringToDouble(phase), FromQStringToDouble(mod_depth), 1);
+
 
             num_sample_edit->clear();
             time_step_edit->clear();
             time_freq_edit->clear();
             amplitude_edit->clear();
+            env_freq_edit->clear();
+            freq_edit->clear();
+            phase_edit->clear();
             mod_depth_edit->clear();
     }
 
@@ -512,6 +584,9 @@ private:
     QLineEdit *time_step_edit;
     QLineEdit *time_freq_edit;
     QLineEdit *amplitude_edit;
+    QLineEdit *env_freq_edit;
+    QLineEdit *freq_edit;
+    QLineEdit *phase_edit;
     QLineEdit *mod_depth_edit;
 };
 
@@ -567,6 +642,9 @@ public:
             QString amplitude = amplitude_edit->text();
             QString phase_start = phase_start_edit->text();
         
+            ctrl::clearChannels();
+            ctrl::Modeling::LFM(1, FromQStringToULL(num_sample), FromQStringToDouble(time_step), FromQStringToDouble(amplitude), 
+                                    FromQStringToDouble(time_freq_start), FromQStringToDouble(time_freq_end), FromQStringToDouble(phase_start), 1);
 
             num_sample_edit->clear();
             time_step_edit->clear();
