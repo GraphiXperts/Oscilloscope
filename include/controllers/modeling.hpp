@@ -34,7 +34,7 @@ public:
 
     static void tonalEnvelope(mdl::time_t start_time, const uint64_t N,  const double freq, const double a, const double f0, const double fn, const double phi, const double m,  const uint64_t j);
 
-    static void LFM(mdl::time_t start_time, const uint64_t N,  const double freq, const double a, const double f0, const double fk, const double phi0, const uint64_t j);
+    static void LFM(mdl::time_t start_time, const uint64_t N,  const double freq, const double a, const double f0, const double fk, const double phi0, const uint64_t j);   
 };
 } // namespace ctrl
 #endif  // _CONTROLLERS_MODELING_HPP_
